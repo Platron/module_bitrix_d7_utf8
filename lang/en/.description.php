@@ -1,0 +1,21 @@
+<?
+$MESS["SALE_HPS_PLATRON_MERCHANT_ID"] = "Merchant ID";
+$MESS["SALE_HPS_PLATRON_SECRET_KEY"] = "Sectert key";
+$MESS["SALE_HPS_PLATRON_TESTING_MODE"] = "Testing mode";
+$MESS["SALE_HPS_PLATRON_ORDER_LIFETIME"] = "Order lifetime in minutes";
+$MESS["SALE_HPS_PLATRON_ORDER_ID"] = "Order ID";
+$MESS["SALE_HPS_PLATRON_DATE_INSERT"] = "Insert date";
+$MESS["SALE_HPS_PLATRON_CURRENCY"] = "Currency";
+$MESS["SALE_HPS_PLATRON_SHOULD_PAY"] = "Amount to pay";
+$MESS["SALE_HPS_PLATRON_CHECK_URL"] = "URL for check";
+$MESS["SALE_HPS_PLATRON_RESULT_URL"] = "URL for result";
+$MESS["SALE_HPS_PLATRON_SUCCESS_URL"] = "URL seccess";
+$MESS["SALE_HPS_PLATRON_FAILURE_URL"] = "URL error";
+$MESS["SALE_HPS_PLATRON_OFD_SEND_RECEIPT"] = "Create check in OFD";
+$MESS["SALE_HPS_PLATRON_OFD_VAT"] = "VAT";
+$MESS["SALE_HPS_PLATRON_EMAIL"] = "Email";
+$MESS["SALE_HPS_PLATRON_PHONE"] = "Client phone";
+$MESS["SALE_HPS_PLATRON_ADDRESS"] = "Client address";
+$MESS["SALE_HPS_PLATRON_CHANGE_STATUS_PAY"] = "Auto change order status to paid when payment success status is received";
+$MESS["SALE_HPS_PLATRON_PAYMENT_SYSTEM"] = "Payment system";
+?>
