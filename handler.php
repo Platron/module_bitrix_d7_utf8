@@ -264,7 +264,7 @@ class PlatronHandler extends PaySystem\ServiceHandler
 
 		$params = $this->getParamsBusValue($payment);
 
-		if (empty($arrRequest['pg_sig']) || !PG_Signature::check($arrRequest['pg_sig'], $thisScriptName, $arrRequest, $params['PLATRON_SECRET_KEY'])) {
+		if (empty($arrRequest['pg_sig']) || !PG_Signature::check($arrRequest['pg_sig'], $thisScriptName, $_POST, $params['PLATRON_SECRET_KEY'])) {
 			die("Wrong signature");
 		}
 
