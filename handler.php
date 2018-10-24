@@ -8,6 +8,7 @@ use Bitrix\Main\Type\DateTime;
 use Bitrix\Sale\PaySystem;
 use Bitrix\Sale\Payment;
 use Bitrix\Main\Entity\EntityError;
+use Bitrix\Main\Localization\Loc;
 
 
 class PlatronHandler extends PaySystem\ServiceHandler
@@ -128,7 +129,7 @@ class PlatronHandler extends PaySystem\ServiceHandler
 				$shipmentCollection = $order->getShipmentCollection();
 
 				foreach ($shipmentCollection as $shipment) {
-					if (!$shipment->isSystem()) {
+					if (!$shipment->isSystem() && $shipment->getPrice() > 0) {
 	    				$ofdReceiptItem = new OfdReceiptItem();
 						$name = $shipment->getDeliveryName();
 						$ofdReceiptItem->label = (toUpper(LANG_CHARSET) == "WINDOWS-1251") ? iconv('cp1251', 'utf-8', $name) : $name;
@@ -272,10 +273,10 @@ class PlatronHandler extends PaySystem\ServiceHandler
 
 			if (sprintf('%0.2f',$arrRequest['pg_amount']) != sprintf('%0.2f',$this->getBusinessValue($payment, 'PAYMENT_SHOULD_PAY'))) {
 				$strResponseStatus = 'error';
-				$strResponseDescription = 'Неверная сумма';
+				$strResponseDescription = Loc::getMessage('INCORRECT_AMOUNT');
 			} elseif ($arrRequest['pg_can_reject'] == 1 and $order->getField('CANCELED') === 'Y') {
 				$strResponseStatus = 'rejected';
-				$strResponseDescription = 'Заказ отменён';
+				$strResponseDescription = Loc::getMessage('ORDER_CANCELED');
 			} else { 
 				$strResponseStatus = 'ok';
 				$strResponseDescription = '';
@@ -307,13 +308,13 @@ class PlatronHandler extends PaySystem\ServiceHandler
 
 			if (sprintf('%0.2f',$arrRequest['pg_amount']) != sprintf('%0.2f',$this->getBusinessValue($payment, 'PAYMENT_SHOULD_PAY'))) {
 				$strResponseStatus = 'error';
-				$strResponseDescription = "Неверная сумма"; 
+				$strResponseDescription = Loc::getMessage('INCORRECT_AMOUNT'); 
 			} elseif ($arrRequest['pg_can_reject'] == 1 and $order->getField('CANCELED') === 'Y') {
 				$strResponseStatus = 'rejected';
-				$strResponseDescription = 'Заказ отменён';
+				$strResponseDescription = Loc::getMessage('ORDER_CANCELED');
 			} else {
 				$strResponseStatus = 'ok';
-				$strResponseDescription = "Оплата принята";
+				$strResponseDescription = Loc::getMessage('PAYMENT_ACCEPTED');
 			
 				if ($arrRequest['pg_result'] == 1) {
 
