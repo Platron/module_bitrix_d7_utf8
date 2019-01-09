@@ -106,23 +106,21 @@ class PlatronHandler extends PaySystem\ServiceHandler
     		if ($params['PLATRON_OFD_SEND_RECEIPT'] == 'Y') {
 
     			$paymentId = (string)$responseElement->pg_payment_id;
+    	        	$ofdReceiptItems = array();
+			$basket = $order->getBasket();
 
-    	        $ofdReceiptItems = array();
-
-				$basket = $order->getBasket();
-
-				/** @var \Bitrix\Sale\BasketItem $basketItem */
+			/** @var \Bitrix\Sale\BasketItem $basketItem */
     			foreach ($basket->getBasketItems() as $basketItem) {
-					if ($basketItem->getPrice() > 0) {
-	    	            $ofdReceiptItem = new OfdReceiptItem();
-						$name = $basketItem->getField("NAME");
-						$ofdReceiptItem->label = (toUpper(LANG_CHARSET) == "WINDOWS-1251") ? iconv('cp1251', 'utf-8', $name) : $name;
-    		            $ofdReceiptItem->amount = round($basketItem->getPrice() * $basketItem->getQuantity(), 2);
-    	    	        $ofdReceiptItem->price = round($basketItem->getPrice(), 2);
-    	        	    $ofdReceiptItem->quantity = $basketItem->getQuantity();
-    	            	$ofdReceiptItem->vat = $params['PLATRON_OFD_VAT'] === '0%' ? '0' : $params['PLATRON_OFD_VAT']; // В настройках указал значение "0%", так как при значении "0" приходит null
-	    	            $ofdReceiptItems[] = $ofdReceiptItem;
-					}
+				if ($basketItem->getPrice() > 0) {
+					$ofdReceiptItem = new OfdReceiptItem();
+					$name = $basketItem->getField("NAME");
+					$ofdReceiptItem->label = (toUpper(LANG_CHARSET) == "WINDOWS-1251") ? iconv('cp1251', 'utf-8', $name) : $name;
+					$ofdReceiptItem->amount = round($basketItem->getPrice() * $basketItem->getQuantity(), 2);
+					$ofdReceiptItem->price = round($basketItem->getPrice(), 2);
+					$ofdReceiptItem->quantity = $basketItem->getQuantity();
+					$ofdReceiptItem->vat = $params['PLATRON_OFD_VAT'] === '0%' ? '0' : $params['PLATRON_OFD_VAT']; // В настройках указал значение "0%", так как при значении "0" приходит null
+					$ofdReceiptItems[] = $ofdReceiptItem;
+				}
         		}
 
 				/** @var \Bitrix\Sale\ShipmentCollection $shipmentCollection */
@@ -130,15 +128,16 @@ class PlatronHandler extends PaySystem\ServiceHandler
 
 				foreach ($shipmentCollection as $shipment) {
 					if (!$shipment->isSystem() && $shipment->getPrice() > 0) {
-	    				$ofdReceiptItem = new OfdReceiptItem();
+						$ofdReceiptItem = new OfdReceiptItem();
 						$name = $shipment->getDeliveryName();
 						$ofdReceiptItem->label = (toUpper(LANG_CHARSET) == "WINDOWS-1251") ? iconv('cp1251', 'utf-8', $name) : $name;
-    					$ofdReceiptItem->amount = round($shipment->getPrice(), 2);
-    					$ofdReceiptItem->price = round($shipment->getPrice(), 2);
-    					$ofdReceiptItem->quantity = 1;
-    					$ofdReceiptItem->vat = $params['PLATRON_OFD_VAT'] === 'none' ? 'none': 20;
-	    				$ofdReceiptItems[] = $ofdReceiptItem;
-    	   			}
+						$ofdReceiptItem->amount = round($shipment->getPrice(), 2);
+						$ofdReceiptItem->price = round($shipment->getPrice(), 2);
+						$ofdReceiptItem->quantity = 1;
+						$ofdReceiptItem->vat = $params['PLATRON_OFD_VAT'] === 'none' ? 'none': 20;
+						$ofdReceiptItem->type = 'service';
+						$ofdReceiptItems[] = $ofdReceiptItem;
+					}
 				}
 
     			$ofdReceiptRequest = new OfdReceiptRequest($params['PLATRON_MERCHANT_ID'], $paymentId);
