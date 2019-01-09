@@ -136,7 +136,7 @@ class PlatronHandler extends PaySystem\ServiceHandler
     					$ofdReceiptItem->amount = round($shipment->getPrice(), 2);
     					$ofdReceiptItem->price = round($shipment->getPrice(), 2);
     					$ofdReceiptItem->quantity = 1;
-    					$ofdReceiptItem->vat = $params['PLATRON_OFD_VAT'] === 'none' ? 'none': 18;
+    					$ofdReceiptItem->vat = $params['PLATRON_OFD_VAT'] === 'none' ? 'none': 20;
 	    				$ofdReceiptItems[] = $ofdReceiptItem;
     	   			}
 				}
